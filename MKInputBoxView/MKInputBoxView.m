@@ -220,6 +220,7 @@
 
     UILabel *titleLabel     = [[UILabel alloc] initWithFrame:
                                CGRectMake(padding, padding, width, 20)];
+    //titleLabel.backgroundColor = [UIColor redColor];
     titleLabel.font         = [UIFont boldSystemFontOfSize:17.0f];
     titleLabel.text         = self.title;
     titleLabel.textAlignment= NSTextAlignmentCenter;
@@ -227,7 +228,8 @@
     [self.visualEffectView.contentView addSubview:titleLabel];
 
     UILabel *messageLabel   = [[UILabel alloc]initWithFrame:
-                               CGRectMake(padding, padding + titleLabel.frame.size.height + 5, width, 31.5)];
+                               CGRectMake(padding, padding + titleLabel.frame.size.height + 5, width, 20)];
+    // messageLabel.backgroundColor = [UIColor redColor];
     messageLabel.numberOfLines  = 2;
     messageLabel.font       = [UIFont systemFontOfSize:13.0f];
     messageLabel.text       = self.message;
@@ -246,7 +248,6 @@
                 self.textInput = self.customise(self.textInput);
             }
             [self.elements addObject:self.textInput];
-            self.textInput.autocorrectionType = UITextAutocorrectionTypeNo;
             break;
 
 
@@ -272,7 +273,6 @@
             }
             [self.elements addObject:self.textInput];
             self.textInput.keyboardType = UIKeyboardTypeEmailAddress;
-            self.textInput.autocorrectionType = UITextAutocorrectionTypeNo;
             break;
 
 
@@ -308,7 +308,7 @@
             if (self.customise) {
                 self.textInput = self.customise(self.textInput);
             }
-            self.textInput.autocorrectionType = UITextAutocorrectionTypeNo;
+
             [self.elements addObject:self.textInput];
 
             self.secureInput = [[UITextField alloc] initWithFrame:
@@ -334,6 +334,7 @@
     }
 
     for (UITextField *element in self.elements) {
+
         element.layer.borderColor   = [UIColor colorWithWhite:0.0f alpha:0.1f].CGColor;
         element.layer.borderWidth   = 0.5;
         element.backgroundColor     = elementBackgroundColor;
@@ -341,20 +342,21 @@
     }
 
     CGFloat buttonHeight    = 40.0f;
-    CGFloat buttonWidth     = self.actualBox.frame.size.width / 2;
+    CGFloat buttonWidth     = self.actualBox.frame.size.width;// / 2;
 
-    UIButton *cancelButton  = [[UIButton alloc] initWithFrame:CGRectMake(0, self.actualBox.frame.size.height - buttonHeight, buttonWidth, buttonHeight)];
-    [cancelButton setTitle:self.cancelButtonText != nil ? self.cancelButtonText : @"Cancel" forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0f];
-    [cancelButton setTitleColor:titleLabelTextColor forState: UIControlStateNormal];
-    [cancelButton setTitleColor:[UIColor grayColor] forState: UIControlStateHighlighted];
-    cancelButton.backgroundColor = buttonBackgroundColor;
-    cancelButton.layer.borderColor = [UIColor colorWithWhite: 0.0f alpha: 0.1f].CGColor;
-    cancelButton.layer.borderWidth = 0.5;
-    [self.visualEffectView.contentView addSubview:cancelButton];
+//    UIButton *cancelButton  = [[UIButton alloc] initWithFrame:CGRectMake(0, self.actualBox.frame.size.height - buttonHeight, buttonWidth, buttonHeight)];
+//    [cancelButton setTitle:self.cancelButtonText != nil ? self.cancelButtonText : @"Cancel" forState:UIControlStateNormal];
+//    [cancelButton addTarget:self action:@selector(cancelButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+//    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0f];
+//    [cancelButton setTitleColor:titleLabelTextColor forState: UIControlStateNormal];
+//    [cancelButton setTitleColor:[UIColor grayColor] forState: UIControlStateHighlighted];
+//    cancelButton.backgroundColor = buttonBackgroundColor;
+//    cancelButton.layer.borderColor = [UIColor colorWithWhite: 0.0f alpha: 0.1f].CGColor;
+//    cancelButton.layer.borderWidth = 0.5;
+//    [self.visualEffectView.contentView addSubview:cancelButton];
 
-    UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonWidth, self.actualBox.frame.size.height - buttonHeight, buttonWidth, buttonHeight)];
+    UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.actualBox.frame.size.height - buttonHeight, buttonWidth, buttonHeight)];
+    
     [submitButton setTitle:self.submitButtonText != nil ? self.submitButtonText : @"OK" forState:UIControlStateNormal];
     [submitButton addTarget:self action:@selector(submitButtonTapped) forControlEvents: UIControlEventTouchUpInside];
     submitButton.titleLabel.font = [UIFont systemFontOfSize:16];
@@ -367,25 +369,26 @@
 
     self.visualEffectView.frame = CGRectMake(0, 0, self.actualBox.frame.size.width, self.actualBox.frame.size.height + 45);
     [self.actualBox addSubview:self.visualEffectView];
-    self.actualBox.center = self.center;
 }
 
 
 
-// -----------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma mark - Handle device rotation
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)deviceOrientationDidChange
 {
+
     [self resetFrame:YES];
 }
 
 
 
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma mark - Button handlers
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)cancelButtonTapped
 {
     if (self.onCancel != nil) {
@@ -394,25 +397,22 @@
     [self hide];
 }
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)submitButtonTapped {
     if (self.onSubmit != nil) {
         NSString *textValue = self.textInput.text;
         NSString *passValue = self.secureInput.text;
-        if (self.onSubmit(textValue, passValue)){
-            [self hide];
-        }
-    } else {
-        [self hide];
+        self.onSubmit(textValue, passValue);
     }
+    [self hide];
 }
 
 
 
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma mark - Beautify numbers...
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)textInputDidChange
 {
     NSString *sText = self.textInput.text;
@@ -426,9 +426,9 @@
 
 
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma mark - Keyboard appearance/disappearance handlers & helpers
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)keyboardDidShow:(NSNotification *)notification
 {
     [self resetFrame:YES];
@@ -440,7 +440,7 @@
     }];
 }
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)keyboardDidHide:(NSNotification *)notification {
     [self resetFrame:YES];
 }
@@ -448,9 +448,9 @@
 
 
 
-// -----------------------------------------------------------------------------
-// Helper to calculate how much we need to lift the input box
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Helper to calculate how much we need to lift the input box not to get covered by the keyboard
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (CGFloat)yCorrection
 {
     CGFloat yCorrection = 115.0f;
@@ -478,26 +478,25 @@
 
 
 
-// -----------------------------------------------------------------------------
-// Helper to calculate where to put the input view after hiding the keyboard.
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Helper to calculate where to put back the input view after hiding the keyboard.
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)resetFrame:(BOOL)animated
 {
+    CGFloat topMargin = (self.boxType == LoginAndPasswordInput) ? 0.0f : 0.0f;
     UIWindow *window = [UIApplication sharedApplication].windows[0];
     self.frame = window.frame;
 
     if (animated) {
         [UIView animateWithDuration:0.3f animations:^{
             self.center = CGPointMake(window.center.x, window.center.y);
-            self.actualBox.center = self.center;
+            self.actualBox.center = CGPointMake(window.center.x, window.center.y - topMargin);
         }];
     }
     else {
         self.center = CGPointMake(window.center.x, window.center.y);
-        self.actualBox.center = self.center;
+        self.actualBox.center = CGPointMake(window.center.x, window.center.y - topMargin);
     }
 }
-
-
 
 @end
