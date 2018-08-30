@@ -411,6 +411,10 @@
         {
             [self hide];
         }
+        else
+        {
+            self.textInput.textColor = [UIColor redColor];
+        }
     }
 //    [self hide];
 }
