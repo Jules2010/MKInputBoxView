@@ -228,9 +228,9 @@
     [self.visualEffectView.contentView addSubview:titleLabel];
 
     UILabel *messageLabel   = [[UILabel alloc]initWithFrame:
-                               CGRectMake(padding, padding + titleLabel.frame.size.height + 5, width, 20)];
+                               CGRectMake(padding, padding + titleLabel.frame.size.height + 5, width, 40)];
     // messageLabel.backgroundColor = [UIColor redColor];
-    messageLabel.numberOfLines  = 2;
+    messageLabel.numberOfLines  = 0;//2;
     messageLabel.font       = [UIFont systemFontOfSize:13.0f];
     messageLabel.text       = self.message;
     messageLabel.textAlignment  = NSTextAlignmentCenter;
@@ -248,9 +248,14 @@
                 self.textInput = self.customise(self.textInput);
             }
             [self.elements addObject:self.textInput];
+            
+            // adjust height!
+            CGRect extendedFrame0 = self.actualBox.frame;
+            extendedFrame0.size.height += 20;
+            self.actualBox.frame = extendedFrame0;
+            
             break;
-
-
+            
         case NumberInput:
             self.textInput = [[UITextField alloc] initWithFrame:
                               CGRectMake(padding, messageLabel.frame.origin.y + messageLabel.frame.size.height + padding / 1.5, width, 30)];
@@ -413,7 +418,8 @@
         }
         else
         {
-            self.textInput.textColor = [UIColor redColor];
+            //self.textInput.textColor = [UIColor redColor];
+            self.textInput.placeholder = @"Please provide a name";
         }
     }
 //    [self hide];
