@@ -399,12 +399,20 @@
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 - (void)submitButtonTapped {
+    
+    NSLog(@"onSubmit=%@", self.onSubmit);
+    
     if (self.onSubmit != nil) {
         NSString *textValue = self.textInput.text;
         NSString *passValue = self.secureInput.text;
         self.onSubmit(textValue, passValue);
+
+        if (![textValue isEqual:@""])
+        {
+            [self hide];
+        }
     }
-    [self hide];
+//    [self hide];
 }
 
 
